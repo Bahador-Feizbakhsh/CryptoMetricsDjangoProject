@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitter Metrics</title>
+</head>
+<body>
+<a href="{% static '4ayKrvfS1pLnMdn5JyXimF2GkR4WPrxm/dogecoin.json' %}">dl file</a>
+<h1>{{ twitter_handle }}</h1>
+<div>
+    <a href="{% static json_file_rel_address %}" download="{{ twitter_handle }}.json">
+        <button>json file</button>
+    </a>
+    <a href="{% static csv_file_rel_address %}" download="{{ twitter_handle }}.csv">
+        <button>csv file</button>
+    </a>
+</div>
+</body>
+</html>
