@@ -105,7 +105,7 @@ def main(user_id, twitter_handle):
         data += json_response['data']
 
     random_dir_name = get_random_string(length=32)
-    staticfiles_path = os.path.join(settings.BASE_DIR, 'staticfiles')
+    staticfiles_path = os.path.join(settings.BASE_DIR, 'static')
     os.mkdir(os.path.join(staticfiles_path, random_dir_name))
 
     json_output_file_rel_address = os.path.join(random_dir_name, f'{twitter_handle}.json')
