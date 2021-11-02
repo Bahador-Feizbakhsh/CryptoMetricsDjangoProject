@@ -1,4 +1,4 @@
-import csv
+import time
 
 import requests
 import os
@@ -22,6 +22,7 @@ def get_user_id(user_screen_name):
         user_id = response.json()['data']['id']
     except KeyError:
         user_id = False
+    # return response
     if user_id:
         return user_id
     else:
@@ -45,10 +46,10 @@ def get_params(**kwargs):
     # lang, non_public_metrics, organic_metrics, possibly_sensitive, promoted_metrics, public_metrics,
     # referenced_tweets, reply_settings, source, text, withheld
     if len(kwargs) != 0:
-        until_id = kwargs['until_id']
+        pagination_token = kwargs['pagination_token']
         return {"tweet.fields": "author_id,created_at,geo,id,public_metrics,text",
                 "max_results": 100,
-                "until_id": until_id}
+                "pagination_token": pagination_token}
     else:
         return {"tweet.fields": "author_id,created_at,geo,id,public_metrics,text",
                 "max_results": 100}
@@ -94,15 +95,20 @@ def save_list_of_dicts_to_csv(list_of_dicts, output_address):
 
 def main(user_id, twitter_handle):
     data = []
-    for i in range(8):
-        if i == 0:
+    i = 1
+    while len(data) < 700:
+        time.sleep(1)
+        if i == 1:
             params = get_params()
         else:
-            params = get_params(until_id=until_id)
+            params = get_params(pagination_token=pagination_token)
         url = f"https://api.twitter.com/2/users/{user_id}/tweets"
         json_response = connect_to_endpoint(url, params)
-        until_id = json_response['meta']['oldest_id']
         data += json_response['data']
+        try:
+            pagination_token = json_response['meta']['next_token']
+        except:
+            break
 
     random_dir_name = get_random_string(length=32)
     staticfiles_path = os.path.join(settings.BASE_DIR, 'static')
