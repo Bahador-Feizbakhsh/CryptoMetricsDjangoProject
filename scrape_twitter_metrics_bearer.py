@@ -106,6 +106,7 @@ def main(user_id, twitter_handle):
         url = f"https://api.twitter.com/2/users/{user_id}/tweets"
         json_response = connect_to_endpoint(url, params)
         data += json_response['data']
+        i += 1
         try:
             pagination_token = json_response['meta']['next_token']
         except:
