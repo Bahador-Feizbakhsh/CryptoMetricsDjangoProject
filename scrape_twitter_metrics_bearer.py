@@ -89,8 +89,9 @@ def save_list_of_dicts_to_csv(list_of_dicts, output_address):
                     temp_dict.update({sub_key: item['public_metrics'][sub_key]})
         new_list.append(temp_dict)
 
-    df = pd.DataFrame(new_list)
-    df.to_csv(output_address)
+    columns = ['id', 'author_id', 'created_at', 'text', 'like_count', 'quote_count', 'reply_count', 'retweet_count']
+    df = pd.DataFrame(new_list, columns=columns).rename(columns={'id': 'tweet_id'})
+    df.to_csv(output_address, index=False)
 
 
 def main(user_id, twitter_handle):
