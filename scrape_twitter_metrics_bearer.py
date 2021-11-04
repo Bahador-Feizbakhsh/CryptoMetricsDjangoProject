@@ -29,6 +29,16 @@ def get_user_id(user_screen_name):
         return 0
 
 
+def get_tweets_count(user_screen_name):
+    url = f"https://api.twitter.com/2/users/by/username/{user_screen_name}"
+    response = requests.request("GET", url, auth=bearer_oauth, params={"user.fields": "public_metrics"})
+    try:
+        user_id = response.json()['data']['id']
+    except KeyError:
+        user_id = False
+    return response.json()['data']['public_metrics']['tweet_count']
+
+
 def get_params(**kwargs):
     # tweet_fields = {"tweet.fields": "attachments, author_id, context_annotations, conversation_id, created_at, "
     #                                 "entities, geo, id, in_reply_to_user_id, lang, non_public_metrics, "
@@ -97,7 +107,7 @@ def save_list_of_dicts_to_csv(list_of_dicts, output_address):
 def main(user_id, twitter_handle):
     data = []
     i = 1
-    while len(data) < 700:
+    while True:
         time.sleep(1)
         if i == 1:
             params = get_params()
@@ -105,10 +115,10 @@ def main(user_id, twitter_handle):
             params = get_params(pagination_token=pagination_token)
         url = f"https://api.twitter.com/2/users/{user_id}/tweets"
         json_response = connect_to_endpoint(url, params)
-        data += json_response['data']
         i += 1
         try:
             pagination_token = json_response['meta']['next_token']
+            data += json_response['data']
         except:
             break
 
