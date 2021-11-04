@@ -20,28 +20,26 @@
     </div>
 {% endif %}
 <br>
-<div>
-    <table>
-        <tr>
-        <td>
-            Results for {{ twitter_handle }}:
-        </td>
-            <td>
-                {% if json_file_rel_address %}
+{% if json_file_rel_address and csv_file_rel_address %}
+    <div>
+        <table>
+            <tr>
+                <td>
+                    Results for {{ twitter_handle }}:
+                </td>
+                <td>
                     <a href="{% static json_file_rel_address %}" download="{{ twitter_handle }}.json">
                         <button>json file</button>
                     </a>
-                {% endif %}
-            </td>
-            <td>
-                {% if csv_file_rel_address %}
+                </td>
+                <td>
                     <a href="{% static csv_file_rel_address %}" download="{{ twitter_handle }}.csv">
                         <button>csv file</button>
                     </a>
-                {% endif %}
-            </td>
-        </tr>
-    </table>
-</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endif %}
 </body>
 </html>
