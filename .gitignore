@@ -1,6 +1,6 @@
 .idea
 /venv
 db.sqlite3
-/staticfiles
-/static
-.env
+#/staticfiles
+#/static
+#.env

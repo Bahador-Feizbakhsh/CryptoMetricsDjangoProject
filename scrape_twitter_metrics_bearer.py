@@ -139,3 +139,20 @@ def main(user_id, twitter_handle):
     save_list_of_dicts_to_csv(data, os.path.join(staticfiles_path, csv_output_file_rel_address))
 
     return json_output_file_rel_address, csv_output_file_rel_address
+
+
+def get_100_tweets(user_id, next_token):
+    if next_token == '':
+        params = get_params()
+    else:
+        params = get_params(pagination_token=next_token)
+    url = f"https://api.twitter.com/2/users/{user_id}/tweets"
+    json_response = connect_to_endpoint(url, params)
+    try:
+        next_token = json_response['meta']['next_token']
+    except:
+        next_token = ''
+    return {
+        'tweets': json_response['data'],
+        'next_token': next_token
+    }
